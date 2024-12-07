@@ -20,7 +20,7 @@ public class UIController : MonoBehaviour
     {
         UpdateScore(0);
         UpdateTargetsKilled(0);
-        UpdateProjectileType("CannonBall"); // Default to CannonBall
+        UpdateProjectileType("CannonBall");
     }
 
     private void Update()
@@ -29,11 +29,22 @@ public class UIController : MonoBehaviour
         {
             ResetLevel();
         }
+
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            QuitGame();
+        }
     }
 
     private void ResetLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private void QuitGame()
+    {
+        Debug.Log("Exiting the game...");
+        Application.Quit();
     }
 
     public void UpdateScore(int newScore)
