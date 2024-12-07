@@ -26,7 +26,10 @@ public class ProjectileThrow : MonoBehaviour
 
     [Header("Trajectory Settings")]
     [SerializeField] private TrajectoryPredictor trajectoryPredictor;
-    [SerializeField] private UnknownComponent unknownComponent; 
+    [SerializeField] private UnknownComponent unknownComponent;
+
+    [Header("UI Settings")]
+    [SerializeField] private UIController uiController;
 
     public InputAction fire;
 
@@ -61,7 +64,7 @@ public class ProjectileThrow : MonoBehaviour
     {
         var currentProjectile = projectilePrefabs[currentProjectileIndex];
         Rigidbody r = currentProjectile.GetComponent<Rigidbody>();
-        
+
         Vector3 velocity = StartPosition.forward * (force / r.mass);
         var trajectory = TrajectoryCalculator.CalculateTrajectory(
             StartPosition.position,
@@ -104,28 +107,35 @@ public class ProjectileThrow : MonoBehaviour
     private void FireProjectile()
     {
         lastFireTime = Time.time;
-        
+
         var selectedProjectile = projectilePrefabs[currentProjectileIndex];
         Rigidbody thrownObject = Instantiate(selectedProjectile, StartPosition.position, StartPosition.rotation);
         thrownObject.AddForce(StartPosition.forward * force, ForceMode.Impulse);
-        
+
         if (fireSound != null)
         {
             audioSource.PlayOneShot(fireSound, fireSoundVolume);
         }
-        
+
         if (reloadSound != null)
         {
             audioSource.clip = reloadSound;
             audioSource.PlayDelayed(fireSound.length);
         }
-        
+
         Destroy(thrownObject.gameObject, 5);
     }
 
     private void SwitchProjectile()
     {
         currentProjectileIndex = (currentProjectileIndex + 1) % projectilePrefabs.Length;
-        Debug.Log($"Switched to: {projectilePrefabs[currentProjectileIndex].name}");
+        string newProjectileName = projectilePrefabs[currentProjectileIndex].gameObject.name;
+        Debug.Log($"Switched to: {newProjectileName}");
+        
+        if (uiController != null)
+        {
+            uiController.UpdateProjectileType(newProjectileName);
+        }
     }
+
 }

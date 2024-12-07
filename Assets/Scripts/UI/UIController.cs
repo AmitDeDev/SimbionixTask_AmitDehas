@@ -12,7 +12,6 @@ public class UIController : MonoBehaviour
 
     private int score;
     private int targetsKilled;
-    private string currentProjectile = "CannonBall";
 
     public int Score => score;
     public int TargetsKilled => targetsKilled;
@@ -21,7 +20,7 @@ public class UIController : MonoBehaviour
     {
         UpdateScore(0);
         UpdateTargetsKilled(0);
-        UpdateProjectileType("CannonBall");
+        UpdateProjectileType("CannonBall"); // Default to CannonBall
     }
 
     private void Update()
@@ -51,7 +50,6 @@ public class UIController : MonoBehaviour
 
     public void UpdateProjectileType(string projectileName)
     {
-        currentProjectile = projectileName;
-        projectileTypeText.text = $"Projectile: {currentProjectile}";
+        projectileTypeText.text = $"Projectile: {projectileName}";
     }
 }
